@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-yarn add module
+yarn add @36node/bus-realtime-sdk
 ```
 
 ## Usage
@@ -13,8 +13,8 @@ yarn add module
 ```js
 const SDK = require("@36node/bus-realtime-sdk");
 
-const sdk = new SDK({ base: "http://localhost:3000" });
-await sdk.pet.listPets();
+const sdk = new SDK({ base: "xxxxx" });
+sdk.vehicle.getSnapshot({ vehicleId: "xxxx" });
 ```
 
 ## Test
