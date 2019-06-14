@@ -11,6 +11,7 @@ describe("## SDK vehicle", () => {
   it("should get snapshot", async () => {
     const result = await sdk.vehicle.getSnapshot({
       vehicleId: "xxxxxx",
+      query: { select: ["vin", "vehicle", "time", "at"] },
     });
     expect(result.body).toHaveProperty("vin");
     expect(result.body).toHaveProperty("vehicle");
