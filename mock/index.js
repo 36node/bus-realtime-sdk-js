@@ -1,4 +1,4 @@
-const { genSnapshots } = require("./vehicle");
+const { genSnapshots, genStatistics } = require("./vehicle");
 
 const myRouter = (req, res, next) => {
   /** example */
@@ -7,6 +7,7 @@ const myRouter = (req, res, next) => {
 
 const rewrites = {
   "/vehicle/snapshots*": "/snapshots$1",
+  "/vehicle/statistics*": "/vehicleStatistics$1",
 };
 
 /**
@@ -23,6 +24,7 @@ function mock({ count = 100, vins = ["LZYTAGBW2E1054491"] }) {
      */
     db: {
       snapshots: genSnapshots({ count, vins }),
+      vehicleStatistics: genStatistics(),
     },
 
     /**

@@ -68,5 +68,20 @@ export default class SDK {
         headers: { Authorization: this.auth, ...headers },
       });
     },
+    /**
+     * Get a statistics of an vehicle from realtime data
+     *
+     * @param {GetStatisticsRequest} req getStatistics request
+     * @returns {Promise<GetStatisticsResponse>} Statistics of an vehicle
+     */
+    getStatistics: (req = {}) => {
+      const { query, headers } = req;
+
+      return fetch(`${this.base}/vehicle/statistics`, {
+        method: "get",
+        query: denormalize(query),
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
   };
 }

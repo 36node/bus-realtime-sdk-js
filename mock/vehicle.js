@@ -133,7 +133,24 @@ const genSnapshots = ({ vins, count }) => {
   );
 };
 
+const genStatistics = () => ({
+  alarmLevel3: 175,
+  alarmLevel3Max: 175,
+  charging: 163,
+  chargingMax: 708,
+  level3Total: 0,
+  offline: 1423,
+  offlineMax: 2269,
+  online: 1158,
+  onlineMax: 1971,
+  onsite: 2581,
+  repairing: 0,
+  repairingMax: 0,
+  totalMileage: 12312212121212,
+});
+
 module.exports = {
   genSnapshot,
   genSnapshots,
+  genStatistics,
 };

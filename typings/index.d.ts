@@ -25,6 +25,10 @@ declare namespace SDK {
      * List all vehicle snapshots from realtime data
      */
     listSnapshots(req: ListSnapshotsRequest): Promise<ListSnapshotsResponse>;
+    /**
+     * Get a statistics of an vehicle from realtime data
+     */
+    getStatistics(req: GetStatisticsRequest): Promise<GetStatisticsResponse>;
   }
 
   type GetSnapshotRequest = {
@@ -63,6 +67,24 @@ declare namespace SDK {
     headers: {
       xTotalCount: number;
     };
+  };
+
+  type GetStatisticsRequest = {
+    query: {
+      select?: number;
+
+      filter: {
+        line?: string;
+        producer?: string;
+        ns: {
+          $regex?: string;
+        };
+      };
+    };
+  };
+
+  type GetStatisticsResponse = {
+    body: VehicleStatistics;
   };
 
   type Err = {
@@ -356,5 +378,20 @@ declare namespace SDK {
     resistance: number;
     aptv: number;
     brake: number;
+  };
+
+  type VehicleStatistics = {
+    onsite: number;
+    online: number;
+    onlineMax: number;
+    offline: number;
+    offlineMax: number;
+    charging: number;
+    chargingMax: number;
+    alarmLevel3: number;
+    alarmLevel3Max: number;
+    repairing: number;
+    repairingMax: number;
+    totalMileage: number;
   };
 }
