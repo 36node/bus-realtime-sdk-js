@@ -21,6 +21,10 @@ declare namespace SDK {
      * Get a snapshot of an vehicle from realtime data
      */
     getSnapshot(req: GetSnapshotRequest): Promise<GetSnapshotResponse>;
+    /**
+     * List all vehicle snapshots from realtime data
+     */
+    listSnapshots(req: ListSnapshotsRequest): Promise<ListSnapshotsResponse>;
   }
 
   type GetSnapshotRequest = {
@@ -32,7 +36,33 @@ declare namespace SDK {
   };
 
   type GetSnapshotResponse = {
-    body: Snapshot;
+    body: VehicleSnapshot;
+  };
+
+  type ListSnapshotsRequest = {
+    query: {
+      limit?: number;
+      offset?: number;
+      sort?: string;
+      select?: number;
+
+      filter: {
+        line?: string;
+        producer?: string;
+        loc?: string;
+        distance?: number;
+        ns: {
+          $regex?: string;
+        };
+      };
+    };
+  };
+
+  type ListSnapshotsResponse = {
+    body: Array<VehicleSnapshot>;
+    headers: {
+      xTotalCount: number;
+    };
   };
 
   type Err = {
@@ -40,7 +70,7 @@ declare namespace SDK {
     message: string;
   };
 
-  type Snapshot = {
+  type VehicleSnapshot = {
     session: string;
     seq: number;
     time: number;

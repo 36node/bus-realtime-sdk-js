@@ -1,4 +1,6 @@
 const faker = require("faker");
+const _ = require("lodash");
+
 const {
   DcStatus,
   DoorStatus,
@@ -12,13 +14,14 @@ const {
  * 生成车辆快照
  *
  */
-const genSnapshot = () => ({
+const genSnapshot = vin => ({
+  id: vin, // id should not exist
   time: 1540902953574,
   session: "z2-NYoZCXXc",
   seq: 749482,
   platform: "yutong",
   command: "REALTIME_REPORT",
-  vin: "LZYTAGBW2E1054491",
+  vin,
   at: "2018-10-30T12:36:00.000Z",
   vehicle: {
     status: faker.random.arrayElement(VehicleStatus),
@@ -124,6 +127,13 @@ const genSnapshot = () => ({
   },
 });
 
+const genSnapshots = ({ vins, count }) => {
+  return _.range(count).map(val =>
+    genSnapshot(faker.random.arrayElement(vins))
+  );
+};
+
 module.exports = {
   genSnapshot,
+  genSnapshots,
 };

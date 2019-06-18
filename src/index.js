@@ -47,7 +47,22 @@ export default class SDK {
 
       if (!vehicleId) throw new Error("vehicleId is required for getSnapshot");
 
-      return fetch(`${this.base}/vehicles/${vehicleId}/snapshot`, {
+      return fetch(`${this.base}/vehicle/snapshots/${vehicleId}`, {
+        method: "get",
+        query: denormalize(query),
+        headers: { Authorization: this.auth, ...headers },
+      });
+    },
+    /**
+     * List all vehicle snapshots from realtime data
+     *
+     * @param {ListSnapshotsRequest} req listSnapshots request
+     * @returns {Promise<ListSnapshotsResponse>} A paged array of vehicle snapshots
+     */
+    listSnapshots: (req = {}) => {
+      const { query, headers } = req;
+
+      return fetch(`${this.base}/vehicle/snapshots`, {
         method: "get",
         query: denormalize(query),
         headers: { Authorization: this.auth, ...headers },

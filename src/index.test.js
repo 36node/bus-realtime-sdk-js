@@ -10,12 +10,21 @@ describe("## SDK vehicle", () => {
 
   it("should get snapshot", async () => {
     const result = await sdk.vehicle.getSnapshot({
-      vehicleId: "xxxxxx",
-      query: { select: ["vin", "vehicle", "time", "at"] },
+      vehicleId: "LZYTAGBW2E1054491",
     });
     expect(result.body).toHaveProperty("vin");
     expect(result.body).toHaveProperty("vehicle");
     expect(result.body).toHaveProperty("time");
     expect(result.body).toHaveProperty("at");
+  });
+
+  it("should list snapshots", async () => {
+    const result = await sdk.vehicle.listSnapshots({
+      query: {
+        limit: 10,
+        vin: "LZYTAGBW2E1054491",
+      },
+    });
+    expect(result.body.length).toBe(10);
   });
 });
