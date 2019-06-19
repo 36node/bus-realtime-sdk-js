@@ -93,6 +93,8 @@ declare namespace SDK {
   };
 
   type VehicleSnapshot = {
+    online: boolean;
+    repairing: boolean;
     session: string;
     seq: number;
     time: number;

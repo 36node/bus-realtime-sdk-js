@@ -16,6 +16,10 @@ const {
  */
 const genSnapshot = vin => ({
   id: vin, // id should not exist
+  online:
+    faker.random.boolean() || faker.random.boolean() || faker.random.boolean(),
+  repairing:
+    faker.random.boolean() && faker.random.boolean() && faker.random.boolean(),
   time: 1540902953574,
   session: "z2-NYoZCXXc",
   seq: 749482,

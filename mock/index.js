@@ -11,7 +11,7 @@ const rewrites = {
 };
 
 /**
- * mock log service
+ * mock realtime service
  *
  * @param {object} opts 参数
  * @param {number} opts.count 产生车辆快照的数量
