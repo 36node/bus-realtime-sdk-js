@@ -18,17 +18,21 @@ describe("## SDK vehicle", () => {
     expect(result.body).toHaveProperty("vehicle");
     expect(result.body).toHaveProperty("time");
     expect(result.body).toHaveProperty("at");
+    expect(result.body).toHaveProperty("no");
+    expect(result.body).toHaveProperty("plate");
+    expect(result.body).toHaveProperty("producer");
+    expect(result.body).toHaveProperty("line");
   });
 
   it("should list snapshots", async () => {
     const result = await sdk.vehicle.listSnapshots({
       query: {
-        limit: 10,
+        limit: 2,
         vin: "LZYTAGBW2E1054491",
       },
     });
 
-    expect(result.body.length).toBe(10);
+    expect(result.body.length).toBe(2);
   });
 
   it("should get statistics", async () => {

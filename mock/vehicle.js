@@ -14,10 +14,15 @@ const {
  * 生成车辆快照
  *
  */
-const genSnapshot = vin => ({
-  id: vin, // id should not exist
+const genSnapshot = vehicle => ({
+  id: vehicle.id, // id should not exist
+  line: vehicle.line,
+  no: vehicle.no,
+  ns: vehicle.ns,
   online:
     faker.random.boolean() || faker.random.boolean() || faker.random.boolean(),
+  plate: vehicle.plate,
+  producer: vehicle.producer,
   repairing:
     faker.random.boolean() && faker.random.boolean() && faker.random.boolean(),
   time: 1540902953574,
@@ -25,7 +30,7 @@ const genSnapshot = vin => ({
   seq: 749482,
   platform: "yutong",
   command: "REALTIME_REPORT",
-  vin,
+  vin: vehicle.id,
   at: "2018-10-30T12:36:00.000Z",
   vehicle: {
     status: faker.random.arrayElement(VehicleStatus),
@@ -131,9 +136,9 @@ const genSnapshot = vin => ({
   },
 });
 
-const genSnapshots = ({ vins, count }) => {
+const genSnapshots = ({ vehicles, count }) => {
   return _.range(count).map(val =>
-    genSnapshot(faker.random.arrayElement(vins))
+    genSnapshot(faker.random.arrayElement(vehicles))
   );
 };
 
