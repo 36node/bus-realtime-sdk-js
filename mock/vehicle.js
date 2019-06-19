@@ -10,6 +10,15 @@ const {
   VehicleStatus,
 } = require("./constants");
 
+function randomLevel() {
+  return Math.min(
+    faker.random.number({ min: 0, max: 3 }),
+    faker.random.number({ min: 0, max: 3 }),
+    faker.random.number({ min: 0, max: 3 }),
+    faker.random.number({ min: 0, max: 3 })
+  );
+}
+
 /**
  * 生成车辆快照
  *
@@ -79,7 +88,7 @@ const genSnapshot = vehicle => ({
     minNtc: 24,
   },
   alarm: {
-    maxLevel: 0,
+    maxLevel: randomLevel(),
     uas: {
       ressChargeOver: false,
       motorTemp: false,
