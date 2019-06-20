@@ -1,6 +1,6 @@
 {
   "name": "@36node/bus-realtime-sdk",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Javascript SDK for Bus Realtime Service",
   "repository": {
     "url": "36node/bus-realtime-sdk-js",
