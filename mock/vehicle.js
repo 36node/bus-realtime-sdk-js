@@ -145,7 +145,7 @@ const genSnapshot = vehicle => ({
   },
 });
 
-const genSnapshots = ({ vehicles, count }) => {
+const genSnapshots = ({ count, vehicles }) => {
   return _.range(count).map(val =>
     genSnapshot(faker.random.arrayElement(vehicles))
   );
