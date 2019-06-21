@@ -1,5 +1,4 @@
-const { genSnapshot, genSnapshots, genStatistics } = require("./vehicle");
-const faker = require("faker");
+const { genSnapshots, genStatistics } = require("./vehicle");
 
 const defaultVehicles = [
   {
@@ -34,7 +33,6 @@ const myRouter = (req, res, next) => {
 };
 
 const rewrites = {
-  "/vehicle/snapshots/*": "/snapshot",
   "/vehicle/snapshots*": "/snapshots$1",
   "/vehicle/statistics*": "/vehicleStatistics$1",
 };
@@ -52,7 +50,6 @@ function mock({ count = 1000, vehicles = defaultVehicles }) {
      * mock data
      */
     db: {
-      snapshot: genSnapshot(faker.random.arrayElement(vehicles)),
       snapshots: genSnapshots({ count, vehicles }),
       vehicleStatistics: genStatistics(),
     },
