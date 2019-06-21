@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.10](https://github.com/36node/bus-realtime-sdk-js/compare/v0.0.9...v0.0.10) (2019-06-21)
+
+
+
 ### [0.0.9](https://github.com/36node/bus-realtime-sdk-js/compare/v0.0.8...v0.0.9) (2019-06-20)
 
 
