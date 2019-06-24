@@ -51,6 +51,7 @@ declare namespace SDK {
       select?: number;
 
       filter: {
+        vin?: string;
         line?: string;
         producer?: string;
         loc?: string;
@@ -93,13 +94,6 @@ declare namespace SDK {
   };
 
   type VehicleSnapshot = {
-    line: string;
-    no: string;
-    ns: string;
-    online: boolean;
-    plate: string;
-    producer: string;
-    repairing: boolean;
     session: string;
     seq: number;
     time: number;

@@ -35,6 +35,20 @@ describe("## SDK vehicle", () => {
     expect(result.body.length).toBe(2);
   });
 
+  it("should list snapshots by vins ", async () => {
+    const result = await sdk.vehicle.listSnapshots({
+      query: {
+        vin: ["LZYTAGBW2E1054491", "LZYTAGBW2E1054492"],
+      },
+    });
+
+    for (const snapshot of result.body) {
+      expect(
+        ["LZYTAGBW2E1054491", "LZYTAGBW2E1054492"].includes(snapshot.vin)
+      ).toBe(true);
+    }
+  });
+
   it("should get statistics", async () => {
     const result = await sdk.vehicle.getStatistics({
       query: {
