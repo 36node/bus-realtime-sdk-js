@@ -15,6 +15,9 @@ const middlewares = jsonServer.defaults();
 
 server.use(middlewares);
 
+// body parser
+server.use(jsonServer.bodyParser);
+
 // rewrites
 server.use(jsonServer.rewriter(rewrites));
 
