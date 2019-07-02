@@ -94,6 +94,13 @@ declare namespace SDK {
   };
 
   type VehicleSnapshot = {
+    line: string;
+    no: string;
+    ns: string;
+    online: boolean;
+    plate: string;
+    producer: string;
+    repairing: boolean;
     session: string;
     seq: number;
     time: number;
@@ -103,7 +110,7 @@ declare namespace SDK {
     at: string;
     sn: number;
     iccid: string;
-    alarm: {
+    alert: {
       maxLevel: number;
       uas: {
         ressChargeOver: boolean;
@@ -237,7 +244,7 @@ declare namespace SDK {
     };
   };
 
-  type Alarm = {
+  type Alert = {
     maxLevel: number;
     uas: {
       ressChargeOver: boolean;
@@ -383,14 +390,15 @@ declare namespace SDK {
 
   type VehicleStatistics = {
     onsite: number;
+    totalVehicles: number;
     online: number;
     onlineMax: number;
     offline: number;
     offlineMax: number;
     charging: number;
     chargingMax: number;
-    alarmLevel3: number;
-    alarmLevel3Max: number;
+    alertLevel3: number;
+    alertLevel3Max: number;
     repairing: number;
     repairingMax: number;
     totalMileage: number;
