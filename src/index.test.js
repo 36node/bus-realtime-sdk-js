@@ -56,11 +56,10 @@ describe("## SDK vehicle", () => {
       },
     });
 
-    expect(result.body).toHaveProperty("alarmLevel3");
-    expect(result.body).toHaveProperty("alarmLevel3Max");
+    expect(result.body).toHaveProperty("alertLevel3");
+    expect(result.body).toHaveProperty("alertLevel3Max");
     expect(result.body).toHaveProperty("charging");
     expect(result.body).toHaveProperty("chargingMax");
-    expect(result.body).toHaveProperty("level3Total");
     expect(result.body).toHaveProperty("offline");
     expect(result.body).toHaveProperty("offlineMax");
     expect(result.body).toHaveProperty("online");
