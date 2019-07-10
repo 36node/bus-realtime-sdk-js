@@ -162,9 +162,9 @@ const genStatistics = () => ({
   onlineMax: 1971,
   onsite: 2581,
   totalVehicles: 3101,
-  repairing: 0,
-  repairingMax: 0,
-  totalMileage: 12312212121212,
+  repairing: 5,
+  repairingMax: 12,
+  totalMileage: 124553433,
 });
 
 module.exports = {
