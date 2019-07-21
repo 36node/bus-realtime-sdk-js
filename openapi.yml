@@ -1,0 +1,806 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Bus Realtime Service
+  license:
+    name: MIT
+servers:
+  - url: https://api.bus.36node.com{basePath}
+    description: The Bus Realtime API server
+    variables:
+      basePath:
+        default: /realtime/v0
+paths:
+  /vehicle/snapshots/{vehicleId}:
+    get:
+      summary: Get a snapshot of an vehicle from realtime data
+      operationId: getSnapshot
+      tags:
+        - vehicle
+      parameters:
+        - name: vehicleId
+          in: path
+          required: true
+          description: The id of vechile
+          schema:
+            type: string
+        - name: _select
+          in: query
+          description: Specifies which document fields to include or exclude
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: A snapshot of an vehicle
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VehicleSnapshot"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /vehicle/snapshots:
+    get:
+      summary: List all vehicle snapshots from realtime data
+      operationId: listSnapshots
+      tags:
+        - vehicle
+      parameters:
+        - name: _limit
+          in: query
+          description: How many items to return at one time (max 100)
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+        - name: _offset
+          in: query
+          description: How many items to escape
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: _sort
+          in: query
+          description: Fields to sort
+          required: false
+          schema:
+            type: string
+        - name: _select
+          in: query
+          description: Specifies which document fields to include or exclude
+          required: false
+          schema:
+            type: integer
+        - name: vin
+          in: query
+          description: vin of vehicle
+          required: false
+          schema:
+            type: string
+        - name: line
+          in: query
+          description: Line of vehicle
+          required: false
+          schema:
+            type: string
+        - name: producer
+          in: query
+          description: 根据生产商查询车辆
+          required: false
+          schema:
+            type: string
+        - name: loc
+          in: query
+          description: |
+            根据地理位置查询时，中心点的地理位置。值(lng,lat)：`123,123`。使用地理位置会忽略_offset与其它查询条件.
+            坐标采用高德坐标系
+          required: false
+          schema:
+            type: string
+        - name: distance
+          in: query
+          description: 根据地理位置查询时，距离中心点的距离
+          required: false
+          schema:
+            type: float
+        - name: ns_like
+          in: query
+          required: false
+          description: 根据车辆namespace查询
+          schema:
+            type: string
+      responses:
+        "200":
+          description: A paged array of vehicle snapshots
+          headers:
+            X-Total-Count:
+              description: Total count of all warnings match the query
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VehicleSnapshot"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /vehicle/statistics:
+    get:
+      summary: Get a statistics of an vehicle from realtime data
+      operationId: getStatistics
+      tags:
+        - vehicle
+      parameters:
+        - name: _select
+          in: query
+          description: Specifies which document fields to include or exclude
+          required: false
+          schema:
+            type: integer
+        - name: line
+          in: query
+          description: Line of vehicle
+          required: false
+          schema:
+            type: string
+        - name: producer
+          in: query
+          description: 根据生产商查询车辆
+          required: false
+          schema:
+            type: string
+        - name: ns_like
+          in: query
+          required: false
+          description: 根据车辆namespace查询
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Statistics of an vehicle
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VehicleStatistics"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+security:
+  - bearerAuth: []
+
+components:
+  responses:
+    NoContent:
+      description: The resource was deleted successfully.
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Err"
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Err"
+    InternalError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Err"
+
+  schemas:
+    Err:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+
+    VehicleSnapshot:
+      required:
+        - vin
+      type: object
+      properties:
+        ## 添加属性
+        line:
+          type: string
+          description: "线路"
+        no:
+          type: string
+          description: "自编号"
+        ns:
+          type: string
+          description: "车辆所属命名空间"
+        online:
+          type: boolean
+        plate:
+          type: string
+          description: "车牌"
+        producer:
+          type: string
+          description: "生产商"
+        repairing:
+          type: boolean
+        ## 32960 属性
+        session:
+          type: string
+          description: 终端的session
+        seq:
+          type: integer
+          description: 消息编号
+        time:
+          description: 平台收到上报的时间
+          type: integer
+          format: int64
+        platform:
+          type: string
+        command:
+          type: string
+        vin:
+          type: string
+        at:
+          description: 设备采集数据的时间
+          type: string
+          format: date
+        sn:
+          description: 流水号
+          type: integer
+          format: int32
+        iccid:
+          description: SIM 卡卡号
+          type: string
+        alert:
+          $ref: "#/components/schemas/Alert"
+        customExt:
+          $ref: "#/components/schemas/CustomExt"
+        extreme:
+          $ref: "#/components/schemas/Extreme"
+        location:
+          $ref: "#/components/schemas/Location"
+        motor:
+          description: 所有电机
+          type: array
+          items:
+            $ref: "#/components/schemas/Motor"
+        vehicle:
+          $ref: "#/components/schemas/Vehicle"
+
+    Alert:
+      description: 报警
+      type: object
+      properties:
+        maxLevel:
+          type: integer
+          format: int32
+        uas:
+          type: object
+          properties:
+            ressChargeOver:
+              description: 车载储能装置类型过充
+              type: boolean
+            motorTemp:
+              description: 驱动电机温度报警
+              type: boolean
+            highVolMuteStatus:
+              description: 高压互锁状态报警
+              type: boolean
+            motorControlTemp:
+              description: 驱动电机控制器温度报警
+              type: boolean
+            dcdcStatus:
+              description: DC-DC 状态报警
+              type: boolean
+            brake:
+              description: 制动系统报警
+              type: boolean
+            dcdcTemp:
+              description: DC-DC 温度报警
+              type: boolean
+            insulation:
+              description: 绝缘报警
+              type: boolean
+            batteryBadConsistency:
+              description: 电池单体一致性差报警
+              type: boolean
+            ressNotMatch:
+              description: 可充电储能系统不匹配报警
+              type: boolean
+            socJump:
+              description: SOC 跳变报警
+              type: boolean
+            socOver:
+              description: SOC 过高报警
+              type: boolean
+            batteryLow:
+              description: 单体电池欠压报警
+              type: boolean
+            batteryOver:
+              description: 单体电池过压报警
+              type: boolean
+            socLow:
+              description: SOC 低报警
+              type: boolean
+            ressVolLow:
+              description: 车载储能装置类型欠压报警
+              type: boolean
+            ressVolOver:
+              description: 车载储能装置类型过压报警
+              type: boolean
+            batteryTempOver:
+              description: 电池高温报警
+              type: boolean
+            tempDiff:
+              description: 温度差异报警
+              type: boolean
+        ressLen:
+          description: 可充电储能装置故障总数
+          type: integer
+        ressList:
+          description: 可充电储能装置故障代码列表
+          type: array
+          items:
+            $ref: "#/components/schemas/Fault"
+        mortorLen:
+          description: 驱动电机故障总数
+          type: integer
+        mortorList:
+          description: 驱动电机故障代码列表
+          type: array
+          items:
+            $ref: "#/components/schemas/Fault"
+        engineLen:
+          description: 发动机故障总数
+          type: integer
+        engineList:
+          description: 发动机故障列表
+          type: array
+          items:
+            $ref: "#/components/schemas/Fault"
+        otherLen:
+          description: 其他故障总数
+          type: integer
+        otherList:
+          description: 其他故障代码列表
+          type: array
+          items:
+            $ref: "#/components/schemas/Fault"
+
+    Fault:
+      description: 故障
+      type: object
+      properties:
+        type:
+          type: integer
+          format: int32
+        code:
+          type: integer
+          format: int32
+        level:
+          type: integer
+          format: int32
+
+    CustomExt:
+      description: 自定义数据
+      type: object
+      properties:
+        dataLen:
+          type: integer
+          format: int32
+        pressure1:
+          type: integer
+          format: int32
+          description: "气压1"
+        pressure2:
+          type: integer
+          format: int32
+          description: "气压2"
+        batteryVoltage:
+          type: number
+          format: float
+          description: "蓄电池电压"
+        dcov:
+          type: number
+          format: float
+          description: "DCDC输出电压"
+        dcoc:
+          type: number
+          format: float
+          description: "DCDC输出电流"
+        dcTemp:
+          type: integer
+          format: int32
+          description: "DCDC散热器温度"
+        acTemp:
+          type: integer
+          format: int32
+          description: "DCAC散热器温度"
+        lftp:
+          type: integer
+          format: int32
+          description: "左前轮胎压力"
+        lftt:
+          type: integer
+          format: int32
+          description: "左前轮胎温度"
+        rftp:
+          type: integer
+          format: int32
+          description: "右前轮胎压力"
+        rftt:
+          type: integer
+          format: int32
+          description: "右前轮胎温度"
+        lr1tp:
+          type: integer
+          format: int32
+          description: "左后 1 轮胎压力"
+        lr1tt:
+          type: integer
+          format: int32
+          description: "左后 1 轮胎温度"
+        lr2tp:
+          type: integer
+          format: int32
+          description: "左后 2 轮胎压力"
+        lr2tt:
+          type: integer
+          format: int32
+          description: "左后 2 轮胎温度"
+        rr1tp:
+          type: integer
+          format: int32
+          description: "右后 1 轮胎压力"
+        rr1tt:
+          type: integer
+          format: int32
+          description: "右后 1 轮胎温度"
+        rr2tp:
+          type: integer
+          format: int32
+          description: "右后 2 轮胎压力"
+        rr2tt:
+          type: integer
+          format: int32
+          description: "右后 2 轮胎温度"
+        cv:
+          type: number
+          format: float
+          description: "充电电压"
+        rc:
+          type: number
+          format: float
+          description: "充电电流"
+        cp:
+          type: number
+          format: float
+          description: "充电电量"
+        totalCharge:
+          type: number
+          format: float
+          description: "累积充电电量"
+        totalDischarge:
+          type: number
+          format: float
+          description: "累积放电电量"
+        instantPower:
+          type: number
+          format: float
+          description: "瞬时电耗"
+        bpiRes:
+          type: integer
+          format: int32
+          description: "电池正绝缘电阻"
+        bniRes:
+          type: integer
+          format: int32
+          description: "电池负绝缘电阻"
+        apTemp:
+          type: integer
+          format: int32
+          description: "气泵扇热器温度"
+        motorContTemp:
+          type: integer
+          format: int32
+          description: "电机控制器温度"
+        airMode:
+          type: string
+          enum: ["OFF", "WIND", "HEATING", "REFRIGERATION", "ABNORMAL"]
+          description: "空调模式: 关闭, 进风, 制热, 制冷"
+        airTemp:
+          type: integer
+          format: int32
+          description: "空调设定温度"
+        insideTemp:
+          type: integer
+          format: int32
+          description: "车厢内实际温度"
+        outsideTemp:
+          type: integer
+          format: int32
+          description: "车外温度"
+        middleDoorStatus:
+          type: string
+          enum: ["CLOSE", "OPEN", "ABNORMAL"]
+          description: "中门状态: 关闭, 开, 异常"
+        frontDoorStatus:
+          type: string
+          enum: ["CLOSE", "OPEN", "ABNORMAL"]
+          description: "前门状态: 关闭, 开, 异常"
+        handbrakeStatus:
+          type: string
+          enum: ["OFF", "ON", "ABNORMAL"]
+          description: "手刹状态: 松, 刹, 异常"
+        keyPosition:
+          type: string
+          enum: ["OFF", "ACC", "ON", "START"]
+          description: "钥匙位置"
+
+    Extreme:
+      type: object
+      description: "车辆极值数据"
+      properties:
+        maxVoltageSubSysNo:
+          type: integer
+          format: int32
+          description: "最高电压电池子系统号"
+        maxVoltageSingNo:
+          type: integer
+          format: int32
+          description: "最高电压电池单体代号"
+        maxVoltage:
+          type: number
+          format: float
+          description: "电池单体电压最高值"
+        minVoltageSubSysNo:
+          type: integer
+          format: int32
+          description: "最低电压电池子系统号"
+        minVoltageSingNo:
+          type: integer
+          format: int32
+          description: "最高电压电池单体代号"
+        minVoltage:
+          type: number
+          format: float
+          description: "电池单体电压最低值"
+        maxNtcSubSysNo:
+          type: integer
+          format: int32
+          description: "最高温度子系统号"
+        maxNtcNo:
+          type: integer
+          format: int32
+          description: "最高温度探针序号"
+        maxNtc:
+          type: integer
+          format: int32
+          description: "最高温度值"
+        minNtcSubSysNo:
+          type: integer
+          format: int32
+          description: "最低温度子系统号"
+        minNtcNo:
+          type: integer
+          format: int32
+          description: "最低温度探针序号"
+        minNtc:
+          type: integer
+          format: int32
+          description: "最低温度值"
+
+    Location:
+      type: object
+      description: "位置"
+      properties:
+        state:
+          type: integer
+          format: int32
+          description: 定位状态
+        lng:
+          type: number
+          format: float
+          description: "经度"
+        lat:
+          type: number
+          format: float
+          description: "纬度"
+
+    Motor:
+      type: object
+      description: "电机数据"
+      properties:
+        no:
+          type: integer
+          format: int32
+          description: "驱动电机序号"
+        status:
+          type: string
+          enum: ["CONSUMPTION", "GENERATION", "OFF", "READY", "ABNORMAL"]
+          description: "驱动电机状态"
+        controlTemp:
+          type: integer
+          format: int32
+          description: "驱动电机控制器温度"
+        speed:
+          type: integer
+          format: int32
+          description: "驱动电机转速"
+        torque:
+          type: number
+          format: float
+          description: "驱动电机转矩 (-2000 ~ 4553.1)"
+        temp:
+          type: integer
+          format: int32
+          description: "驱动电机温度"
+        voltage:
+          type: number
+          format: float
+          description: "电机控制器输入电压"
+        current:
+          type: number
+          format: float
+          description: "电机控制器直流母线电流"
+
+    Vehicle:
+      type: object
+      description: 整车信息
+      properties:
+        status:
+          type: string
+          enum: ["ON", "OFF", "OTHER", "ABNORMAL"]
+          description: "车辆状态: 启动, 熄火, 其他, 异常"
+        chargeStatus:
+          type: string
+          enum:
+            [
+              "PARK_CHARGING",
+              "MOVE_CHARGING",
+              "UNCHARGED",
+              "CHARGED",
+              "ABNORMAL",
+            ]
+          description: "车辆的充电状态: 停车充电、行驶充电、未充电、充电完成、异常"
+        mode:
+          type: string
+          enum: ["ELECTRIC", "MIXED", "FUEL", "ABNORMAL"]
+          description: "车辆模式: 纯电, 混合, 燃油"
+        speed:
+          type: number
+          format: float
+          description: "车速"
+        mileage:
+          type: number
+          format: float
+          description: "累计里程"
+        voltage:
+          type: number
+          format: float
+          description: "总电压"
+        current:
+          type: number
+          format: float
+          description: "总电流"
+        soc:
+          type: number
+          format: float
+          description: "state of charge"
+        dcStatus:
+          type: string
+          enum: ["ON", "OFF", "ABNORMAL"]
+          description: "DC-DC 状态: 工作, 断开"
+        shift:
+          type: string
+          enum:
+            [
+              "N",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "R",
+              "D",
+              "P",
+            ]
+          description: "车辆档位"
+        resistance:
+          type: integer
+          format: int32
+          description: "绝缘电阻"
+        aptv:
+          type: number
+          format: float
+          description: "加速踏板行程值"
+        brake:
+          type: number
+          format: float
+          description: "制动行程"
+
+    VehicleStatistics:
+      type: object
+      description: 统计数据
+      properties:
+        onsite:
+          type: integer
+          format: int32
+          description: 入网车辆总数
+        totalVehicles: 
+          type: integer
+          format: int32
+          description: 新能源车辆总数
+        online:
+          type: integer
+          format: int32
+          description: 在线车辆总数
+        onlineMax:
+          type: integer
+          format: int32
+          description: 在线车辆当日峰值
+        offline:
+          type: integer
+          format: int32
+          description: 离线车辆总数
+        offlineMax:
+          type: integer
+          format: int32
+          description: 离线车辆当日峰值
+        charging:
+          type: integer
+          format: int32
+          description: 充电车辆总数
+        chargingMax:
+          type: integer
+          format: int32
+          description: 充电车辆当日峰值
+        alertLevel3:
+          type: integer
+          format: int32
+          description: 当前出现level3报警的车辆数
+        alertLevel3Max:
+          type: integer
+          format: int32
+          description: 当日出现Level3报警车辆数峰值
+        repairing:
+          type: integer
+          format: int32
+          description: 正在维修中的车辆总数
+        repairingMax:
+          type: integer
+          format: int32
+          description: 维修中车辆当日峰值
+        totalMileage:
+          type: integer
+          format: int64
+          description: 所有车辆总里程数
+
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

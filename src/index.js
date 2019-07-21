@@ -25,7 +25,7 @@ export default class SDK {
    *
    * @param {Object} opt
    * @param {string} opt.base  base url
-   * @param {string} opt.token token fro authorization
+   * @param {string} opt.token token for authorization
    */
   constructor(opt = {}) {
     this.base = opt.base || "";
@@ -48,7 +48,7 @@ export default class SDK {
       if (!vehicleId) throw new Error("vehicleId is required for getSnapshot");
 
       return fetch(`${this.base}/vehicle/snapshots/${vehicleId}`, {
-        method: "get",
+        method: "GET",
         query: denormalize(query),
         headers: { Authorization: this.auth, ...headers },
       });
@@ -63,7 +63,7 @@ export default class SDK {
       const { query, headers } = req;
 
       return fetch(`${this.base}/vehicle/snapshots`, {
-        method: "get",
+        method: "GET",
         query: denormalize(query),
         headers: { Authorization: this.auth, ...headers },
       });
@@ -78,7 +78,7 @@ export default class SDK {
       const { query, headers } = req;
 
       return fetch(`${this.base}/vehicle/statistics`, {
-        method: "get",
+        method: "GET",
         query: denormalize(query),
         headers: { Authorization: this.auth, ...headers },
       });
