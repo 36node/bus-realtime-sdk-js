@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.16](https://github.com/36node/bus-realtime-sdk-js/compare/v0.0.15...v0.0.16) (2019-07-24)
+
+
+### Bug Fixes
+
+* test int ([6357e3f](https://github.com/36node/bus-realtime-sdk-js/commit/6357e3f))
+
+
+
 ### [0.0.15](https://github.com/36node/bus-realtime-sdk-js/compare/v0.0.14...v0.0.15) (2019-07-21)
 
 
