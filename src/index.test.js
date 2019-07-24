@@ -32,7 +32,7 @@ describe("## SDK vehicle", () => {
       },
     });
 
-    expect(result.body.length).toBe(2);
+    expect(result.body.length).toBe(1);
   });
 
   it("should list snapshots by vins ", async () => {
